@@ -6,7 +6,7 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import string
 
-logging.config.fileConfig("logging.conf")
+logging.config.fileConfig("config/logging.conf")
 logger = logging.getLogger(__name__)
 
 EXIT_SUCCESS = 0
