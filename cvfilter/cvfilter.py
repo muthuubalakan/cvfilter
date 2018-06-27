@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import sys
-from collections import Counter
 import os
-from format_checker import FormatChecker
+import argparse
+from content_extractor import PDFContent
 
 
-class Textfinder(FormatChecker):
+class Textfinder(PDFContent):
     """Textfinder search word in the all the files.
 
     Searching all the files for requested word
@@ -22,40 +22,46 @@ class Textfinder(FormatChecker):
             files_total.append(files)
         return files_total
 
-    def scan_file(self, filename):
-        FormatChecker.check_format(filename)
-        container = []
-        with open(filename) as f:
-            for line in f:
-                for word in line.split():
-                    container.append(word)
 
-        if len(container) != 0:
-            counts = Counter(container)
-            return counts
-
-    def search_word(self, filename, word_list):
-        counts_dict = self.scan_file(filename)
+    def search_word(self, filename, word_file):
+        if not word_file.endswith('.txt'):
+            sys.stderr.write("Text file required")
+            sys.exit(1)
+        data = PDFContent.get_list(filename)
         # Words in the file
         result = []
-        words = counts_dict.keys()
-        for word in word_list:
-            if word in words:
+        for word in word_file:
+            if word in data:
                 result.append(word)
         if len(result) != 0:
             for key in result:
                 print("The file : {} has the word: {}  repeated: {}".
-                      format(filename, key, counts_dict[key]))
+                      format(filename, key))
 
-    def main(self):
-        word_list = sys.argv[1]
-        filename = [filename for filename in self.load_files()]
+    def init_search(self, word_list, path):
+        filename = [filename for filename in self.load_files(path)]
         for filename in filename:
-            if filename.endswith('.txt'):
-                filename = os.path.join(os.getcwd, filename)
+            if filename.endswith('.pdf'):
                 self.search_word(filename, word_list)
 
 
+def get_files():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p', "--path", help="Resume directory", type=str)
+    parser.add_argument('-t', "--textfile", help="Text file", type=str)
+    parser.add_argument('-v', "--verbose", help="verbose", action='store_true')
+    args = parser.parse_args()
+    if not (args.resumefile and args.textfile):
+        sys.stderr.write("Resume directory and textfile required. Stopping..\n")
+        sys.exit(1)
+    return args
+
+
 if __name__ == '__main__':
-    A = Textfinder()
-    A.main()
+    args = get_files()
+    path = args.path
+    word_file = args.textfile
+    finder = Textfinder()
+    sys.stdout("Textfinder - Version 0.1")
+    finder.init_search(word_file, path)
+
