@@ -1,7 +1,7 @@
 CVfilter
 ========
 
-Cv filter basic tool for parsing resume.
+Cv filter basic tool for parsing.
 +++++++++++++++++++++++++++++++++++++++
 
 Usage:
