@@ -13,7 +13,7 @@ EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 
 
-class PDFConent:
+class PDFContent:
     def pdf_content(self, filename, mode='rb'):
         data = " "
         if hasattr(PyPDF2, 'PdfFileReader'):
