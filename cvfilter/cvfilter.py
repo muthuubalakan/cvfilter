@@ -4,8 +4,10 @@ import os
 import argparse
 from content_extractor import PDFContent
 
+pdf = PDFContent()
 
-class Textfinder(PDFContent):
+
+class Textfinder:
     """Textfinder search word in the all the files.
 
     Searching all the files for requested word
@@ -25,18 +27,22 @@ class Textfinder(PDFContent):
 
     def search_word(self, filename, word_file):
         if not word_file.endswith('.txt'):
-            sys.stderr.write("Text file required")
+            sys.stderr.write("Text file required\n")
             sys.exit(1)
-        data = PDFContent.get_list(filename)
+        data = pdf.get_list(filename)
         # Words in the file
         result = []
-        for word in word_file:
-            if word in data:
-                result.append(word)
+        with open(word_file) as word_file:
+            for word in word_file:
+                if word in data:
+                    result.append(word)
+                else:
+                    print("The word {} is not found in {}".format(word, filename))
         if len(result) != 0:
             for key in result:
                 print("The file : {} has the word: {}  repeated: {}".
                       format(filename, key))
+
 
     def init_search(self, word_list, path):
         filename = [filename for filename in self.load_files(path)]
@@ -51,8 +57,8 @@ def get_files():
     parser.add_argument('-t', "--textfile", help="Text file", type=str)
     parser.add_argument('-v', "--verbose", help="verbose", action='store_true')
     args = parser.parse_args()
-    if not (args.resumefile and args.textfile):
-        sys.stderr.write("Resume directory and textfile required. Stopping..\n")
+    if not (args.textfile):
+        sys.stderr.write("specify a resume directory and textfile: Required. Stopping..\n")
         sys.exit(1)
     return args
 
@@ -62,6 +68,6 @@ if __name__ == '__main__':
     path = args.path
     word_file = args.textfile
     finder = Textfinder()
-    sys.stdout("Textfinder - Version 0.1")
+    sys.stdout.write("Textfinder - Version 0.1\n")
     finder.init_search(word_file, path)
 
