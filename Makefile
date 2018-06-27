@@ -7,3 +7,9 @@ clean:
 	rm -f `find . -type f -name '#*#' `
 	rm -f `find . -type f -name '*.orig' `
 	rm -f `find . -type f -name '*.rej' `
+	rm -f `find . -type f -name '*.swp'`
+	rm -f `find . -type f -name '*.swo'`
+
+Install:
+       sudo pip install -r requirements.txt
+	
