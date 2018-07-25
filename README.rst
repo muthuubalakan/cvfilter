@@ -1,11 +1,11 @@
-CVfilter
+resumeparser
 ========
 
-Cv filter basic tool for parsing.
+Light weight resumeparser in python
 +++++++++++++++++++++++++++++++++++++++
 
 Usage:
 
 .. code-block:: shell
 
-              >>> python cvfileter.py -p[path] -t[textfile]
+              >>> python resumeparser.py -p[resume dir path] -t[key words text file]
